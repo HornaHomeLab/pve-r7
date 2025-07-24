@@ -1,0 +1,43 @@
+- name: Fetch SSH keys
+  hosts: all
+  gather_facts: false
+  vars_files:
+    - vars/vault.yml
+    - vars/vault-vm-access.yml
+  roles:
+    - role: stanislawhorna.ansible.hcp_vault_ssh_setup
+
+- name: Cluster prep
+  hosts: all
+  gather_facts: true
+  become: true
+  vars_files:
+    - vars/k3s.yml
+  roles:
+    - role: k3s.orchestration.prereq
+
+- name: Setup K3S server
+  hosts: server
+  become: true
+  vars_files:
+    - vars/k3s.yml
+  roles:
+    - role: k3s.orchestration.k3s_server
+
+- name: Setup K3S agent
+  hosts: agent
+  become: true
+  vars_files:
+    - vars/k3s.yml
+  roles:
+    - role: k3s.orchestration.k3s_agent
+
+- name: Install local registry
+  hosts: all
+  become: true
+  vars_files:
+      - vars/vault.yml
+      - vars/vault-vm-access.yml
+      - vars/vault-registry-cert.yml
+  roles:
+    - role: stanislawhorna.ansible.k3s_install_local_registry

@@ -1,0 +1,3 @@
+registry_url: "docker-hub.horna.local"
+vault_registry_cert_mount_point: "cert_secrets"
+vault_registry_cert_field: "certificate"

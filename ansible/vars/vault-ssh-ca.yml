@@ -1,0 +1,3 @@
+vault_ssh_ca_mount_point: "ssh"
+vault_ssh_ca_pub_field: "public_key"
+vault_ssh_ca_path: "ssh/config/ca"

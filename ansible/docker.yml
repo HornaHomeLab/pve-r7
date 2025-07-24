@@ -1,0 +1,21 @@
+- hosts: docker
+  gather_facts: no
+
+  vars_files:
+      - vars/vault.yml
+      - vars/vault-vm-access.yml
+      - vars/vault-registry-cert.yml
+
+  roles:
+    - role: stanislawhorna.ansible.hcp_vault_ssh_setup
+    - role: stanislawhorna.ansible.install_docker
+      become: true
+    - role: stanislawhorna.ansible.docker_install_local_registry
+      become: true
+
+  tasks:
+    - name: Remove temporary SSH private key
+      file:
+        path: "{{ ssh_key_temp_path }}"
+        state: absent
+      delegate_to: localhost

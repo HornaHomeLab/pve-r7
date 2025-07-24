@@ -1,0 +1,26 @@
+- hosts: ubuntu
+  gather_facts: no
+
+  vars_files:
+      - vars/vault.yml
+      - vars/vault-vm-access.yml
+      - vars/vault-ssh-ca.yml
+
+  roles:
+    - role: stanislawhorna.ansible.hcp_vault_ssh_setup
+    - role: stanislawhorna.ansible.set_ssh_ca_cert
+      become: true
+    - role: stanislawhorna.ansible.upgrade_packages
+      become: true
+    - role: stanislawhorna.ansible.install_pwsh
+      become: true
+    - role: stanislawhorna.ansible.install_brew
+    - role: stanislawhorna.ansible.install_oh_my_posh
+
+
+  tasks:
+    - name: Remove temporary SSH private key
+      file:
+        path: "{{ ssh_key_temp_path }}"
+        state: absent
+      delegate_to: localhost
