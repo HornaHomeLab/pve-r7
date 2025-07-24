@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Deploy:
+  Terraform:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -29,19 +29,19 @@ jobs:
         id: vault-cert
         uses: hashicorp/vault-action@v2
         with:
-          url: http://vault.horna.local:8200
+          url: http://10.0.10.10:8200
           method: approle
           roleId: ${{ secrets.VAULT_TF_ROLE_ID }}
           secretId: ${{ secrets.VAULT_TF_SECRET_ID }}
           secrets: |
-            cert_secrets/data/vault.horna.local certificate | TLS_CRT
-  
-      - name: Install Vault TLS certificate to trusted store
+            pki/cert/ca certificate | TLS_CRT
+
+      - name: Install internal CA certificate
         run: |
-          echo "${{ steps.vault-cert.outputs.TLS_CRT }}" > vault-ca.crt
-          sudo cp vault-ca.crt /usr/local/share/ca-certificates/vault-ca.crt
+          echo "${{ steps.vault-cert.outputs.TLS_CRT }}" > internal-root-ca.crt
+          sudo cp internal-root-ca.crt /usr/local/share/ca-certificates/internal-root-ca.crt
           sudo update-ca-certificates
-  
+
       - name: Terraform Init
         run: cd ./terraform && terraform init
 
@@ -58,3 +58,54 @@ jobs:
 
       - name: Terraform Apply (auto-approve on push to main)
         run: cd ./terraform && terraform apply -auto-approve tfplan
+
+  Ansible:
+    runs-on: ubuntu-latest
+    needs: Terraform
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible sshpass
+
+          - name: Connect Tailscale
+          uses: tailscale/github-action@v2
+          with:
+            oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+            oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+            tags: tag:ci
+
+      - name: Get Vault TLS certificate
+        id: vault-cert
+        uses: hashicorp/vault-action@v2
+        with:
+          url: http://10.0.10.10:8200
+          method: approle
+          roleId: ${{ secrets.VAULT_TF_ROLE_ID }}
+          secretId: ${{ secrets.VAULT_TF_SECRET_ID }}
+          secrets: |
+            pki/cert/ca certificate | TLS_CRT
+
+      - name: Install internal CA certificate
+        run: |
+          echo "${{ steps.vault-cert.outputs.TLS_CRT }}" > internal-root-ca.crt
+          sudo cp internal-root-ca.crt /usr/local/share/ca-certificates/internal-root-ca.crt
+          sudo update-ca-certificates
+
+      - name: Generate inventory files
+        run: |
+          cd ./terraform \
+            && terraform init \
+            && terraform apply -auto-approve
+
+      - name: Install Ansible dependencies
+        run: |
+          cd ./ansible \
+          && ansible-galaxy install -r ./collections/requirements.yml -f
+
+      - name: Run Ansible Playbook
+        run: |
+          ansible-playbook -i ./inventory/default.ini ubuntu.yml
