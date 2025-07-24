@@ -25,6 +25,23 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
+      - name: Get Vault TLS certificate
+        id: vault-cert
+        uses: hashicorp/vault-action@v2
+        with:
+          url: http://vault.horna.local:8200
+          method: approle
+          roleId: ${{ secrets.VAULT_TF_ROLE_ID }}
+          secretId: ${{ secrets.VAULT_TF_SECRET_ID }}
+          secrets: |
+            cert_secrets/data/vault.horna.local certificate | TLS_CRT
+  
+      - name: Install Vault TLS certificate to trusted store
+        run: |
+          echo "${{ steps.vault-cert.outputs.TLS_CRT }}" > vault-ca.crt
+          sudo cp vault-ca.crt /usr/local/share/ca-certificates/vault-ca.crt
+          sudo update-ca-certificates
+  
       - name: Terraform Init
         run: cd ./terraform && terraform init
 
