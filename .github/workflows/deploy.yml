@@ -57,5 +57,4 @@ jobs:
             -out=tfplan
 
       - name: Terraform Apply (auto-approve on push to main)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: cd ./terraform && terraform apply -auto-approve tfplan
