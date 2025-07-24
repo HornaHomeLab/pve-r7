@@ -119,10 +119,27 @@ jobs:
           cd ./ansible \
           && ansible-galaxy install -r ./collections/requirements.yml -f
 
-      - name: Run Ansible Playbook
+      - name: Run Ansible Playbook with default inventory
         env:
           ANSIBLE_HASHI_VAULT_ROLE_ID: ${{ secrets.VAULT_AN_ROLE_ID }}
           ANSIBLE_HASHI_VAULT_SECRET_ID: ${{ secrets.VAULT_AN_SECRET_ID }}
         run: |
-          cd ./ansible \
-          && ansible-playbook -i ./inventory/default.ini ubuntu.yml
+          cd ./ansible
+          for play in *.yml; do
+            if [[ $play != k3s* ]]; then
+              echo "⏳ Running $play"
+              ansible-playbook -i inventory/default.ini "$play"
+            fi
+          done
+
+      - name: Run Ansible Playbook to provision K3s clusters
+        env:
+          ANSIBLE_HASHI_VAULT_ROLE_ID: ${{ secrets.VAULT_AN_ROLE_ID }}
+          ANSIBLE_HASHI_VAULT_SECRET_ID: ${{ secrets.VAULT_AN_SECRET_ID }}
+        run: |
+          cd ./ansible
+          shopt -s nullglob
+          for file in inventory/k3s_cluster*.ini; do
+            echo "⏳ Running k3s playbook for inventory: $file"
+            ansible-playbook -i "$file" ansible/k3s_cluster_provisioning.yml -e "@ansible/vars/k3s.yml"
+          done
