@@ -77,7 +77,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ansible sshpass
+          sudo apt-get install -y ansible sshpass python3-hvac
 
       - name: Connect Tailscale
         uses: tailscale/github-action@v2
