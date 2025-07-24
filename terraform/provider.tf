@@ -7,6 +7,15 @@ terraform {
       version = "3.0.1-rc6"
     }
   }
+  backend "http" {
+    address = "http://10.0.10.11:8001/state/pve-r7/prod"
+  }
+}
+data "terraform_remote_state" "foo" {
+  backend = "http"
+  config = {
+    address = "http://10.0.10.11:8001/state/pve-r7/prod"
+  }
 }
 
 provider "proxmox" {
