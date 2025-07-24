@@ -35,3 +35,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ansible files to ignore
+ansible/tmp/*
+ansible/inventory/*.ini
