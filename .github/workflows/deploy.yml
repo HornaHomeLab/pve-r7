@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ansible-inventory
-          path: ${{ runner.temp }}/ansible/inventory/*
+          path: ./ansible/inventory/*
           if-no-files-found: warn
           retention-days: 1
 
@@ -106,7 +106,7 @@ jobs:
       - name: Download inventory files
         uses: actions/download-artifact@v4
         with:
-          path: ${{ runner.temp }}/ansible/inventory
+          path: ./ansible/inventory
           name: ansible-inventory
 
       - name: Install Ansible dependencies
