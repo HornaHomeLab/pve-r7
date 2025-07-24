@@ -8,9 +8,9 @@
 
   roles:
     - role: stanislawhorna.ansible.hcp_vault_ssh_setup
-    - role: stanislawhorna.ansible.set_ssh_ca_cert
-      become: true
     - role: stanislawhorna.ansible.upgrade_packages
+      become: true
+    - role: stanislawhorna.ansible.set_ssh_ca_cert
       become: true
     - role: stanislawhorna.ansible.install_pwsh
       become: true
