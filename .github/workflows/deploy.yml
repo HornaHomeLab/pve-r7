@@ -14,7 +14,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.2
-            
+
       - name: Terraform Format Check
         run: cd ./terraform && terraform fmt -check
 
@@ -24,7 +24,7 @@ jobs:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
-      
+
       - name: Terraform Init
         run: cd ./terraform && terraform init
 
@@ -32,7 +32,12 @@ jobs:
         run: cd ./terraform && terraform validate
 
       - name: Terraform Plan
-        run: cd ./terraform && terraform plan -out=tfplan
+        run: |
+          cd ./terraform \
+          && terraform plan \
+            -var "vault_role_id=${{ secrets.VAULT_TF_ROLE_ID }}" \
+            -var "vault_secret=${{ secrets.VAULT_TF_SECRET_ID }}" \
+            -out=tfplan
 
       - name: Terraform Apply (auto-approve on push to main)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
