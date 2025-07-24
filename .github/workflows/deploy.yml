@@ -77,7 +77,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ansible sshpass python3-hvac
+          sudo apt-get install -y ansible sshpass
+
+      - name: Install hvac in Ansible's interpreter
+        run: |
+          /opt/pipx/venvs/ansible-core/bin/python -m pip install --upgrade pip
+          /opt/pipx/venvs/ansible-core/bin/python -m pip install hvac
 
       - name: Connect Tailscale
         uses: tailscale/github-action@v2
