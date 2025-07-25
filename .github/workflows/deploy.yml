@@ -2,6 +2,9 @@ name: Deploy Virtual Machines
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   Terraform:
