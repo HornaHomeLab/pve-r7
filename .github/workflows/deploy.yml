@@ -26,8 +26,8 @@ jobs:
         with:
           TS_OAUTH_CLIENT_ID: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           TS_OAUTH_SECRET_ID: ${{ secrets.TS_OAUTH_SECRET }}
-          VAULT_ROLE_ID: ${{ secrets.VAULT_TF_ROLE_ID }}
-          VAULT_SECRET_ID: ${{ secrets.VAULT_TF_SECRET_ID }}
+          VAULT_ROLE_ID: ${{ secrets.VAULT_GH_ROLE_ID }}
+          VAULT_SECRET_ID: ${{ secrets.VAULT_GH_SECRET_ID }}
 
       - name: Terraform Init
         run: cd ./terraform && terraform init
