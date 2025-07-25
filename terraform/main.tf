@@ -1,6 +1,6 @@
 module "ubuntu_vm" {
   source            = "github.com/StanislawHorna/Terraform/ubuntu-vm"
-  target_node       = "pve-r7"
+  target_node       = lookup(each.value, "target_node", "pve-r7")
   hcp_vault_role_id = var.vault_role_id
   hcp_vault_secret  = var.vault_secret
 
