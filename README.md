@@ -6,11 +6,12 @@ on the `pve-r7` Proxmox VE node, leveraging the power of:
 - Terraform - to provision and manage Proxmox virtual machines
 - Ansible - to configure and manage the provisioned VMs
 
-This repository targets a specific node within the Proxmox cluster (`pve-r7`) to ensure reliable execution,
-as not all nodes are continuously available.
-By focusing on a single node, the setup reduces the number of Ansible playbooks and Virtual Machines
-that needs to be configured during each GitHub Actions run,
-improving efficiency and minimizing unnecessary operations.
+> [!NOTE]
+>This repository targets a specific node within the Proxmox cluster (`pve-r7`) to ensure reliable execution,
+>as not all nodes are continuously available.
+>By focusing on a single node, the setup reduces the number of Ansible playbooks and Virtual Machines
+>that needs to be configured during each GitHub Actions run,
+>improving efficiency and minimizing unnecessary operations.
 
 ## CI/CD with GitHub Actions
 
