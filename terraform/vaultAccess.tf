@@ -12,5 +12,5 @@ provider "vault" {
 }
 
 data "vault_generic_secret" "pve_creds" {
-  path = "infrastructure/pve-r7"
+  path = "infrastructure/Proxmox_Cluster"
 }
