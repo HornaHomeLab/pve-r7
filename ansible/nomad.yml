@@ -13,7 +13,6 @@
 
   roles:
     - role: stanislawhorna.ansible.hcp_vault_ssh_setup
-      become: true
     - role: stanislawhorna.ansible.install_docker
       become: true
     - role: stanislawhorna.ansible.docker_install_local_registry
