@@ -21,3 +21,10 @@
       become: true
     - role: stanislawhorna.ansible.hcp_nomad
       become: true
+
+  tasks:
+    - name: Remove temporary SSH private key
+      file:
+        path: "{{ ssh_key_temp_path }}"
+        state: absent
+      delegate_to: localhost
