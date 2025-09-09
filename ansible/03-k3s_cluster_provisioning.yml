@@ -36,8 +36,28 @@
   hosts: all
   become: true
   vars_files:
-      - vars/vault.yml
-      - vars/vault-vm-access.yml
-      - vars/vault-registry-cert.yml
+    - vars/vault.yml
+    - vars/vault-vm-access.yml
+    - vars/vault-registry-cert.yml
   roles:
     - role: stanislawhorna.ansible.k3s_install_local_registry
+
+- name: Install ingress-nginx controller
+  hosts: all
+  become: true
+  vars_files:
+    - vars/vault.yml
+    - vars/vault-vm-access.yml
+    - vars/vault-registry-cert.yml
+  roles:
+    - role: stanislawhorna.ansible.k3s_install_nginx_ingress
+
+- name: Upload K3S context
+  hosts: server
+  become: true
+  vars_files:
+    - vars/k3s.yml
+    - vars/vault.yml
+    - vars/vault-vm-access.yml
+  roles:
+    - role: stanislawhorna.ansible.k3s_upload_context_to_vault
