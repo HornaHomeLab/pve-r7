@@ -50,4 +50,4 @@
     - vars/vault.yml
     - vars/vault-vm-access.yml
   roles:
-    - role: k3s_upload_context_to_vault
+    - role: stanislawhorna.ansible.k3s_upload_context_to_vault
