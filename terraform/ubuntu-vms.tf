@@ -15,7 +15,7 @@ locals {
     "k3s-02" = {
       target_node  = "pve-r7"
       vm_desc      = "K3s production agent"
-      vmid =         222
+      vmid         = 222
       memory       = 8192
       cores        = 4
       ip_address   = "10.0.10.222"
@@ -27,7 +27,7 @@ locals {
     "k3s-03" = {
       target_node  = "pve-r7"
       vm_desc      = "K3s production agent"
-      vmid =         223
+      vmid         = 223
       memory       = 8192
       cores        = 4
       ip_address   = "10.0.10.223"
