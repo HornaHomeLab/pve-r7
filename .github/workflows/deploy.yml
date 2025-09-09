@@ -116,7 +116,7 @@ jobs:
         run: |
           cd ./ansible
           for play in *.yml; do
-            if [[ $play != k3s* ]]; then
+            if [[ $play != *k3s* ]]; then
               echo "⏳ Running $play"
               ansible-playbook -i inventory/default.ini "$play"
             fi
@@ -131,5 +131,5 @@ jobs:
           shopt -s nullglob
           for file in inventory/k3s_cluster*.ini; do
             echo "⏳ Running k3s playbook for inventory: $file"
-            ansible-playbook -i "$file" ./k3s_cluster_provisioning.yml
+            ansible-playbook -i "$file" ./03-k3s_cluster_provisioning.yml
           done
