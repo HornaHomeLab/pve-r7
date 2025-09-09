@@ -1,7 +1,7 @@
 ---
 - name: Install Nomad on Ubuntu
   gather_facts: no
-  hosts: nomad
+  hosts: nomad_server, nomad_client
   become: yes
   vars:
     cluster_size: 1

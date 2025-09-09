@@ -7,7 +7,7 @@ locals {
       cidr_netmask = "24"
       gateway      = "10.0.10.1"
       dns_servers  = ["10.0.10.11", "1.1.1.1"]
-      tags         = ["ubuntu", "nomad"]
+      tags         = ["ubuntu", "nomad_server"]
     },
     "hcp-02" = {
       target_node  = "pve-r7"
@@ -16,7 +16,7 @@ locals {
       cidr_netmask = "24"
       gateway      = "10.0.10.1"
       dns_servers  = ["10.0.10.11", "1.1.1.1"]
-      tags         = ["ubuntu", "nomad"]
+      tags         = ["ubuntu", "nomad_client"]
     },
     "hcp-03" = {
       target_node  = "pve-r7"
@@ -25,7 +25,7 @@ locals {
       cidr_netmask = "24"
       gateway      = "10.0.10.1"
       dns_servers  = ["10.0.10.11", "1.1.1.1"]
-      tags         = ["ubuntu", "nomad"]
+      tags         = ["ubuntu", "nomad_client"]
     }
   }
 }
