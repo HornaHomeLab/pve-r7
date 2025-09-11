@@ -1,2 +1,5 @@
 k3s_version: v1.29.3+k3s1
+cluster_context: "{{ ansible_inventory_sources | last | basename | splitext | first }}"
 api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
+extra_server_args: >
+  --node-taint node-role.kubernetes.io/master=true:NoSchedule
